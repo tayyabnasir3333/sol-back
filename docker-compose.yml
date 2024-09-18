@@ -1,0 +1,23 @@
+version: "3.9"
+services:
+  server:
+    build: .
+    ports:
+      - "4000:4000"
+    depends_on:
+      - mongodb
+    environment:
+      MONGO_URI: "mongodb://root:root@mongodb:27017/telegram-bot"
+    restart: always
+  mongodb:
+    image: "mongo"
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - "mongo-data:/data/db"
+      - "./config/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js"
+    command: mongod --quiet --logpath /dev/null --auth
+
+volumes:
+  mongo-data:
